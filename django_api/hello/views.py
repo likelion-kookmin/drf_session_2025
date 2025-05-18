@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 def hello_world(request):
     """
@@ -51,10 +52,11 @@ def ping_post(request):
     """
     POST 요청에 대한 응답
     """
-    request_data = request.POST.get('message', 'Hello, World!')
+    request_data = request.body.decode('utf-8')
+    json_data = json.loads(request_data)
 
     return JsonResponse({
-        "message": request_data,
+        "message": json_data.get('message', 'Hello, World!'),
         "status": "success",
     })
 
